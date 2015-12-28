@@ -1,0 +1,2 @@
+defmodule Stockfighter do
+end
