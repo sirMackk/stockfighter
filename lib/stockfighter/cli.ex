@@ -57,9 +57,27 @@ defmodule Stockfigher.CLI do
       |> handle_post_response
   end
 
+
   # move above out of this module, this should only have top level cli cmds
   # venue_setup =
   # get stocks on venue, get orderbooks for each stock (or specific stock)
+  # MAKE STOCK ORDERBOOK an AGENT
   # get tickertape updates to stock
-  # execute actions
+  # execute actions - actions - actions happen on conditions when something about stock or time happens
+end
+
+defmodule Stockfighter.Orderbook do
+  # how can this be a time-series map?
+  def start_link(venue) do
+    Agent.start_link(fn -> HashDict.new end, name: venue)
+  end
+
+  def get_price(venue, stock) do
+    Agent.get(venue, &Dict.fetch(&1, stock))
+  end
+  def update(stock, price) do
+    Agent.update(venue, fn (dict) -> 
+      Dict.put(dict, stock, price)
+    end)
+  end
 end
