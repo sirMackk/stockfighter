@@ -5,6 +5,7 @@ defmodule Stockfigher.CLI do
       |> parse_args
       |> process
   end
+  # add argparser
 
 
 
