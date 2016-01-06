@@ -1,4 +1,6 @@
 defmodule Stockfighter.ApiClient do
+  alias Stockfighter.Orderbook, as: Orderbook
+
   @api_key Application.get_env(:stockfighter, :api_key)
   @api_url Application.get_env(:stockfighter, :api_url)
   @wss_url "wss://api.stockfighter.io/ob/api/ws"
@@ -25,19 +27,26 @@ defmodule Stockfighter.ApiClient do
     @wss_url <> "/#{account}/venues/#{venue}/tickertape/stocks/#{stock}"
   end
 
+  defp stock_quote(venue, stock) do
+    @api_url <> "/venues/#{venue}/stocks/#{stock}/quote"
+  end
+
   def get_stocks_for(venue) do
     venue_stock_url(venue)
       |> HTTPoison.get(@headers)
-      |> handle_get_response
   end
 
   def get_order_book_stock(venue, stock) do
     orderbook_url(venue, stock)
       |> HTTPoison.get(@headers)
-      |> handle_get_response
   end
 
-  def buy_stock(venue, stock, qty, price, acc) do
+  def get_quote_for(venue, stock) do
+    get_quote_for(venue, stock)
+      |> HTTPoison.get(@headers)
+  end
+
+  def buy_stock_limit(venue, stock, qty, price, acc) do
     post_new_order(venue, stock, qty, price, acc, "buy")
   end
 
@@ -48,5 +57,5 @@ defmodule Stockfighter.ApiClient do
   defp post_new_order(venue, stock, qty, price, acc, direction) do
     new_order_url(venue, stock)
       |> HTTPoison.post(@headers)
-      |> handle_post_response
   end
+end

@@ -1,16 +1,27 @@
-defmodule Stockfigher.CLI do
+defmodule Stockfighter.CLI do
 
   def main(args) do
     args
-      |> parse_args
-      |> process
+      |> process_args
   end
-  # add argparser
+
+  defp process_args(args) do
+    {parsed, _, _} = OptionParser.parse(args, switches: [level: :string])
+
+    case Keyword.pop(parsed, :level) do
+      "one" ->
+        Stockfighter.Levels.One.run(parsed)
+      _ -> help
+    end
+  end
 
 
+  defp help do
+    IO.puts "This is help"
+  end
 
-  # venue_setup =
-  # get stocks on venue, get orderbooks for each stock (or specific stock)
-  # execute actions - actions - actions happen on conditions when something about stock or time happens
+  # get correct info from stock and from quote
+  # make post_order accept params and post correctly
+  # check when order is filled
 end
 

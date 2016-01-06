@@ -5,7 +5,7 @@ defmodule Stockfighter.Mixfile do
     [app: :stockfighter,
      version: "0.0.1",
      elixir: "~> 1.1",
-     name: "Stockfigher"
+     name: "Stockfigher",
      escript: escript_config,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -16,7 +16,7 @@ defmodule Stockfighter.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :httpoison]]
+    [applications: [:logger, :httpoison, :jsx]]
   end
 
   # Dependencies can be Hex packages:
@@ -31,6 +31,7 @@ defmodule Stockfighter.Mixfile do
   defp deps do
     [
       {:httpoison, "~> 0.8"},
+      {:jsx, "~> 2.0"}
     ]
   end
 

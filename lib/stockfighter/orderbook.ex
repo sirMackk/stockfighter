@@ -7,7 +7,7 @@ defmodule Stockfighter.Orderbook do
   def get_price(venue, stock) do
     Agent.get(venue, &Dict.fetch(&1, stock))
   end
-  def update(stock, price) do
+  def update(venue, stock, price) do
     Agent.update(venue, fn (dict) -> 
       Dict.put(dict, stock, price)
     end)
