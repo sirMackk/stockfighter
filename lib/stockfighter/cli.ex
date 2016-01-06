@@ -20,8 +20,6 @@ defmodule Stockfighter.CLI do
     IO.puts "This is help"
   end
 
-  # get correct info from stock and from quote
-  # make post_order accept params and post correctly
   # check when order is filled
 end
 
