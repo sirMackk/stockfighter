@@ -8,9 +8,10 @@ defmodule Stockfighter.CLI do
   defp process_args(args) do
     {parsed, _, _} = OptionParser.parse(args, switches: [level: :string])
 
+    IO.inspect Keyword.pop(parsed, :level)
     case Keyword.pop(parsed, :level) do
-      "one" ->
-        Stockfighter.Levels.One.run(parsed)
+      {"one", rest} ->
+        Stockfighter.Levels.One.run(rest)
       _ -> help
     end
   end

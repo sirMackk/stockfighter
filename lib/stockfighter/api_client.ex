@@ -46,7 +46,7 @@ defmodule Stockfighter.ApiClient do
 
   def get_quote_for(venue, stock) do
     Logger.info("Getting quote for #{venue}/#{stock}")
-    get_quote_for(venue, stock)
+    stock_quote(venue, stock)
       |> HTTPoison.get(@headers)
       |> handle_response
   end
@@ -57,7 +57,7 @@ defmodule Stockfighter.ApiClient do
 
   def post_new_order(order) when is_map(order) do
     new_order_url(order.venue, order.stock)
-      |> HTTPoison.post(:jsx.encode(Map.from_struct(order)), @headers ++ @json_header)
+      |> HTTPoison.post(:jsx.encode(Map.from_struct(order)), @headers)
   end
 
   defp handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do
