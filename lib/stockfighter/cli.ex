@@ -12,6 +12,8 @@ defmodule Stockfighter.CLI do
     case Keyword.pop(parsed, :level) do
       {"one", rest} ->
         Stockfighter.Levels.One.run(rest)
+      {"two", rest} ->
+        Stockfighter.Levels.Two.run(rest)
       _ -> help
     end
   end

@@ -1,15 +1,14 @@
 defmodule Stockfighter.Orderbook do
-  # how can this be a time-series map?
   def start_link(venue) do
-    Agent.start_link(fn -> HashDict.new end, name: venue)
+    Agent.start_link(fn -> Map.new end, name: __MODULE__)
   end
 
-  def get_price(venue, stock) do
-    Agent.get(venue, &Dict.fetch(&1, stock))
+  def get_price(stock) do
+    Agent.get(__MODULE__, &Map.fetch(&1, stock)) |> hd
   end
-  def update(venue, stock, price) do
-    Agent.update(venue, fn (dict) -> 
-      Dict.put(dict, stock, price)
+  def update(stock, data) do
+    Agent.update(__MODULE__, fn (dict) ->
+      Map.update(dict, stock, [data], &([data] ++ &1))
     end)
   end
 end
