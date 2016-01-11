@@ -31,7 +31,8 @@ defmodule Stockfighter.Mixfile do
   defp deps do
     [
       {:httpoison, "~> 0.8"},
-      {:jsx, "~> 2.0"}
+      {:jsx, "~> 2.8"},
+      {:socket, "~> 0.3.1", git: "https://github.com/meh/elixir-socket.git"}
     ]
   end
 
