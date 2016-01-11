@@ -4,21 +4,21 @@ defmodule Stockfighter.WebsocketConsumer do
   def run(url, callback) do
     {domain, path} = parse_url(url)
     socket = Socket.Web.connect!(domain, path: path, secure: true)
-    pid = spawn(Stockfighter.WebsocketConsumer, :listen, [url, socket, callback])
+    spawn(Stockfighter.WebsocketConsumer, :listen, [url, socket, self])
 
-    send(pid, {:listen, self})
-    process(pid, callback)
+    process(callback)
   end
 
-  def process(pid, callback) do
+  def process(callback) do
     receive do
       {:ok, data} ->
         callback.(data)
       {:ping} ->
         Logger.info("Pong")
+      {:error, _, url} ->
+        run(url, callback)
     end
-    send(pid, {:listen, self})
-    process(pid, callback)
+    process(callback)
   end
 
   defp recv(socket) do
@@ -29,26 +29,20 @@ defmodule Stockfighter.WebsocketConsumer do
     end
   end
 
-  def listen(url, socket, callback) do
-    receive do
-      {:listen, pid} ->
-        case recv(socket) do
-          {:text, data} ->
-            send(pid, {:ok, data})
-          {:ping, _} ->
-            Logger.info("Ping!")
-            Socket.Web.send!(socket, {:pong, ""})
-            send(pid, {:ping})
-          {:error, e} ->
-            Logger.warn("Websocket died because: #{e}. Attempting to restart")
-            run(url, callback)
-            exit(:died)
-        end
-      {:shutdown} ->
-        Socket.Web.close(socket)
-        exit(:died)
-    end
-    listen(url, socket, callback)
+  def listen(url, socket, pid) do
+      case recv(socket) do
+        {:text, data} ->
+          send(pid, {:ok, data})
+        {:ping, _} ->
+          Logger.info("Ping!")
+          Socket.Web.send!(socket, {:pong, ""})
+          send(pid, {:ping})
+        {:error, e} ->
+          Logger.warn("Websocket died because: #{e}. Attempting to restart")
+          send(pid, {:error, e, url})
+          exit(:died)
+      end
+    listen(url, socket, pid)
   end
 
   defp parse_url(url) do
