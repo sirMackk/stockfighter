@@ -12,7 +12,7 @@ defmodule Stockfighter.WebsocketConsumer do
   def process(callback) do
     receive do
       {:ok, data} ->
-        callback.(data)
+        spawn(fn -> callback.(data) end)
       {:ping} ->
         Logger.info("Pong")
       {:error, _, url} ->
