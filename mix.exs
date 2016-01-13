@@ -16,7 +16,7 @@ defmodule Stockfighter.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :httpoison, :jsx]]
+    [applications: [:logger, :httpoison, :jsx, :tzdata]]
   end
 
   # Dependencies can be Hex packages:
@@ -32,7 +32,9 @@ defmodule Stockfighter.Mixfile do
     [
       {:httpoison, "~> 0.8"},
       {:jsx, "~> 2.8"},
-      {:socket, "~> 0.3.1", git: "https://github.com/meh/elixir-socket.git"}
+      {:timex, "~> 0.19.2"},
+      {:tzdata, "~> 0.1.8", override: true},
+      {:socket, "~> 0.3.1", git: "https://github.com/meh/elixir-socket.git"},
     ]
   end
 

@@ -1,8 +1,11 @@
 %{"certifi": {:hex, :certifi, "0.3.0"},
+  "combine": {:hex, :combine, "0.7.0"},
   "hackney": {:hex, :hackney, "1.4.8"},
   "httpoison": {:hex, :httpoison, "0.8.0"},
   "idna": {:hex, :idna, "1.0.3"},
   "jsx": {:hex, :jsx, "2.8.0"},
   "mimerl": {:hex, :mimerl, "1.0.2"},
-  "socket": {:git, "https://github.com/meh/elixir-socket.git", "9067ac4e94799806bdd15ecb5f31b89e2582547a", []},
-  "ssl_verify_hostname": {:hex, :ssl_verify_hostname, "1.0.5"}}
+  "socket": {:git, "https://github.com/meh/elixir-socket.git", "fd7d726bc91164837b7ed06421b21322da07c8e8", []},
+  "ssl_verify_hostname": {:hex, :ssl_verify_hostname, "1.0.5"},
+  "timex": {:hex, :timex, "0.19.5"},
+  "tzdata": {:hex, :tzdata, "0.1.8"}}

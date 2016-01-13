@@ -4,7 +4,7 @@ defmodule Stockfighter.WebsocketConsumer do
   def run(url, callback) do
     {domain, path} = parse_url(url)
     socket = Socket.Web.connect!(domain, path: path, secure: true)
-    spawn(Stockfighter.WebsocketConsumer, :listen, [url, socket, self])
+    spawn_link(Stockfighter.WebsocketConsumer, :listen, [url, socket, self])
 
     process(callback)
   end
@@ -30,18 +30,18 @@ defmodule Stockfighter.WebsocketConsumer do
   end
 
   def listen(url, socket, pid) do
-      case recv(socket) do
-        {:text, data} ->
-          send(pid, {:ok, data})
-        {:ping, _} ->
-          Logger.info("Ping!")
-          Socket.Web.send!(socket, {:pong, ""})
-          send(pid, {:ping})
-        {:error, e} ->
-          Logger.warn("Websocket died because: #{e}. Attempting to restart")
-          send(pid, {:error, e, url})
-          exit(:died)
-      end
+    case recv(socket) do
+      {:text, data} ->
+        send(pid, {:ok, data})
+      {:ping, _} ->
+        Logger.info("Ping!")
+        Socket.Web.send!(socket, {:pong, ""})
+        send(pid, {:ping})
+      {:error, e} ->
+        Logger.warn("Websocket died because: #{inspect(e)}. Attempting to restart")
+        send(pid, {:error, e, url})
+        exit(:died)
+    end
     listen(url, socket, pid)
   end
 
