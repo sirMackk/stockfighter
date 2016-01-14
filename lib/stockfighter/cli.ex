@@ -8,20 +8,27 @@ defmodule Stockfighter.CLI do
   defp process_args(args) do
     {parsed, _, _} = OptionParser.parse(args, switches: [level: :string])
 
-    case Keyword.pop(parsed, :level) do
+    case Keyword.pop(parsed, :action) do
       {"one", rest} ->
-        Stockfighter.Levels.One.run(rest)
+        Stockfighter.Solutions.One.run(rest)
       {"two", rest} ->
-        Stockfighter.Levels.Two.run(rest)
+        Stockfighter.Solutions.Two.run(rest)
+      {"quote-proc", rest} ->
+        Stockfighter.Tools.QuoteProcessor.run(rest)
       _ -> help
     end
   end
 
 
   defp help do
-    IO.puts "This is help"
-  end
+    IO.puts """
+    Solutions:
+    one - args: venue, acc
+    two - args: venue, acc, pr
 
-  # check when order is filled
+    Tools:
+    quote-proc - args: venue, acc
+    """
+  end
 end
 

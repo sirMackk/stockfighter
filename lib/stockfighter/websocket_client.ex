@@ -1,10 +1,10 @@
-defmodule Stockfighter.WebsocketConsumer do
+defmodule Stockfighter.WebsocketClient do
   require Logger
 
   def run(url, callback) do
     {domain, path} = parse_url(url)
     socket = Socket.Web.connect!(domain, path: path, secure: true)
-    spawn_link(Stockfighter.WebsocketConsumer, :listen, [url, socket, self])
+    spawn_link(Stockfighter.WebsocketClient, :listen, [url, socket, self])
 
     process(callback)
   end

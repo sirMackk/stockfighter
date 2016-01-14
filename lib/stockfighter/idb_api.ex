@@ -1,6 +1,7 @@
 defmodule Stockfighter.IdbApi do
-  @db_name "stockfighter"
   require Logger
+
+  @db_name "stockfighter"
 
   defp influxdb_url do
     "http://localhost:8086/write?db=#{@db_name}&precision=u"
@@ -39,7 +40,7 @@ defmodule Stockfighter.IdbApi do
       |> String.to_char_list
   end
 
-  def handle_response({:ok, %HTTPoison.Response{status_code: 204, body: body}}), do: nil
+  def handle_response({:ok, %HTTPoison.Response{status_code: 204, body: _}}), do: nil
 
   def handle_response({:ok, %HTTPoison.Response{status_code: 200, body: reason}}), do: log_error(reason)
 
