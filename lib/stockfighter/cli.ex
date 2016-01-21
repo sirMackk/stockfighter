@@ -15,6 +15,8 @@ defmodule Stockfighter.CLI do
         Stockfighter.Solutions.Two.run(rest)
       {"quote-proc", rest} ->
         Stockfighter.Tools.QuoteProcessor.run(rest)
+      {"exec-proc", rest} ->
+        Stockfighter.Tools.ExecutionProcessor.run(rest)
       _ -> help
     end
   end

@@ -7,18 +7,26 @@ defmodule Stockfighter.IdbApi do
     "http://localhost:8086/write?db=#{@db_name}&precision=u"
   end
 
-  def insert_line(data) do
+  def insert_line(data, data_type \\ "quote") do
     influxdb_url
-      |> HTTPoison.post(data |> line_proto_serialize)
+      |> HTTPoison.post(data |> line_proto_serialize(data_type))
       |> handle_response
   end
 
-  defp line_proto_serialize(data) when is_list(data) do
-    ~c(quote,venue=#{data[:venue]},symbol=#{data[:symbol]} ) ++
-    optional_elements(data, "bid") ++
-    optional_elements(data, "ask") ++
-    ~c(lastSize=#{data[:lastSize]},lastTrade=#{micro_s_epoch(data[:lastTrade])} ) ++
-    ~c(#{micro_s_epoch(data[:quoteTime])})
+  defp line_proto_serialize(data, type) when is_list(data) do
+    case type do
+      "quote" ->
+        ~c(quote,venue=#{data[:venue]},symbol=#{data[:symbol]} ) ++
+        optional_elements(data, "bid") ++
+        optional_elements(data, "ask") ++
+        ~c(lastSize=#{data[:lastSize]},lastTrade=#{micro_s_epoch(data[:lastTrade])} ) ++
+        ~c(#{micro_s_epoch(data[:quoteTime])})
+      "execution" ->
+        ~c(execution,venue=#{data[:venue]},symbol=#{data[:symbol]} ) ++
+        ~c(direction=#{data[:direction]},qty=#{data[:qty]},price=#{data[:price]}) ++
+        ~c(orderType=#{data[:orderType]},account=#{data[:account]} ) ++
+        ~c(#{micro_s_epoch(data[:filledAt])})
+    end
   end
 
   defp optional_elements(data, type) do

@@ -37,7 +37,7 @@ defmodule Stockfighter.ApiClient do
     @wss_url <> "/#{account}/venues/#{venue}/tickertape/stocks/#{stock}"
   end
 
-  defp stock_fills(account, venue) do
+  def stock_fills(account, venue) do
     @wss_url <> "/#{account}/venues/#{venue}/executions"
   end
 

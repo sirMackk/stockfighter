@@ -41,6 +41,8 @@ defmodule Stockfighter.WebsocketClient do
         Logger.warn("Websocket died because: #{inspect(e)}. Attempting to restart")
         send(pid, {:error, e, url})
         exit(:died)
+      data ->
+        Logger.warn("Errant data: #{inspect(data)}")
     end
     listen(url, socket, pid)
   end
